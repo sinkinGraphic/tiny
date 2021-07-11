@@ -15,7 +15,7 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "set build type")
 
 project(Snake)
 
-add_executable(Snake main.cpp GameInstance.cpp)
+add_executable(Snake main.cpp GameInstance.cpp GamePlay.cpp)
 
 #OpenCV libs
 target_link_libraries(Snake ${OpenCV_LIBS})

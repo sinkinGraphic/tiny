@@ -3,6 +3,7 @@
 #include <vector>
 #include "Eigen/Eigen"
 #include "Snake.hpp"
+#include "Candy.hpp"
 
 enum class EKeyBoradKeys : uint8_t
 {
@@ -45,5 +46,6 @@ private:
     std::vector<Eigen::Vector3f> RenderBuffer;
     Eigen::Vector2i ScreenRes;
 
+    Candy mCandy;
     Snake mSnake;
 };

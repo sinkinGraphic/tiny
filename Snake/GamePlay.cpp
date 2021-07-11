@@ -23,35 +23,49 @@ void GamePlay::SetScreenResolution(const int X, const int Y)
     DrawRenderBuffer();
 
     mSnake.BodyCoord.push_back(Eigen::Vector2i(X / 2, Y / 2));
+    mSnake.BodyCoord.push_back(Eigen::Vector2i(X / 2, Y / 2));
+    CreateNewCandy();
 }
 
 void GamePlay::Step()
 {
+    mSnake.BodyCoord[0] += CurrentDirection;
+    if (mSnake.CheckCandy(mCandy.Pos))
+    {
+        mSnake.BodyCoord.emplace_back(Eigen::Vector2i());
+        CreateNewCandy();
+    }
     auto Size = mSnake.BodyCoord.size();
-    for (size_t i = Size; i != 1; --i)
+    for (size_t i = Size - 1; i > 0; --i)
     {
         mSnake.BodyCoord[i] = mSnake.BodyCoord[i - 1];
     }
-    mSnake.BodyCoord[0] += CurrentDirection;
     FlushBuffer();
 }
 
 void GamePlay::CreateNewCandy()
 {
+    mCandy.Pos.x() = rand() % ScreenRes.x();
+    mCandy.Pos.y() = rand() % ScreenRes.y();
 }
 
 void GamePlay::FlushBuffer()
 {
-    int X=ScreenRes.x(),Y=ScreenRes.y();
+    int X = ScreenRes.x(), Y = ScreenRes.y();
     Buffer.clear();
-    Buffer.resize(X * Y,Eigen::Vector3f(0.f,0.f,0.f));
+    Buffer.resize(X * Y, Eigen::Vector3f(0.f, 0.f, 0.f));
     InitBorder();
     RenderBuffer.resize(X * Y * 20 * 20, Eigen::Vector3f());
 
-    for(int i=0;i!=mSnake.BodyCoord.size();++i)
+    //draw Snake
+    for (int i = 0; i != mSnake.BodyCoord.size(); ++i)
     {
-        Buffer[ScreenCoordToIndex(mSnake.BodyCoord[i],ScreenRes)]=Eigen::Vector3f(1.f,0.f,0.f);
+        Buffer[ScreenCoordToIndex(mSnake.BodyCoord[i], ScreenRes)] = Eigen::Vector3f(1.f, 0.f, 0.f);
     }
+
+    //draw candy
+    Buffer[ScreenCoordToIndex(mCandy.Pos, ScreenRes)] = Eigen::Vector3f(0.f, 1.f, 0.f);
+
     DrawRenderBuffer();
 }
 

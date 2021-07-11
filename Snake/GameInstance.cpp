@@ -4,9 +4,14 @@
 #include <map>
 #include "opencv2/opencv.hpp"
 
+
+GameSettings Settings;
+
 void GameInstance::Start()
-{
-    GamePlayLogic.SetScreenResolution(50, 50);
+{   
+    Settings.BoardSize = Eigen::Vector2i(12, 12);
+    Settings.GridSize = 50;
+    GamePlayLogic.InitGame(Settings);
     float DeltaSeconds = 0.f;
 
     while (true)
@@ -43,7 +48,7 @@ void GameInstance::Tick(float DeltaSeconds)
         std::pair<int, EKeyBoradKeys>(100, EKeyBoradKeys::D)};
 
     int Key;
-    cv::Mat img(1000, 1000, CV_32FC3, GamePlayLogic.GetRenderBuffer().data());
+    cv::Mat img(Settings.BoardSize.x()*Settings.GridSize, Settings.BoardSize.y()*Settings.GridSize, CV_32FC3, GamePlayLogic.GetRenderBuffer().data());
     cv::imshow("Snake", img);
     Key = cv::waitKey(30);
     auto Iter = Key2Type.find(Key);

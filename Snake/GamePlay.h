@@ -13,9 +13,18 @@ enum class EKeyBoradKeys : uint8_t
     D
 };
 
+struct GameSettings
+{
+    Eigen::Vector2i BoardSize;
+    int GridSize;
+};
+
 class GamePlay
 {
 public:
+
+    void InitGame(const GameSettings& InGameSettings);
+
     void ProcessInput(EKeyBoradKeys Key);
 
     void SetScreenResolution(const int X,const int Y);
@@ -25,8 +34,6 @@ public:
     std::vector<Eigen::Vector3f>& GetRenderBuffer() { return RenderBuffer; }
 
     void Step();
-
-    
 
 private:
     void InitBorder();
@@ -48,4 +55,6 @@ private:
 
     Candy mCandy;
     Snake mSnake;
+
+    GameSettings Settings;
 };

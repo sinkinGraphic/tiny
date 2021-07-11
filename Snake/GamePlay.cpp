@@ -1,5 +1,11 @@
 #include "GamePlay.h"
 
+void GamePlay::InitGame(const GameSettings &InGameSettings)
+{
+    Settings = InGameSettings;
+    SetScreenResolution(Settings.BoardSize.x(), Settings.BoardSize.y());
+}
+
 void GamePlay::ProcessInput(EKeyBoradKeys Key)
 {
     const Eigen::Vector2i Key2Direction[4] = {
@@ -14,7 +20,7 @@ void GamePlay::ProcessInput(EKeyBoradKeys Key)
 void GamePlay::SetScreenResolution(const int X, const int Y)
 {
     Buffer.resize(X * Y);
-    RenderBuffer.resize(X * Y * 20 * 20, Eigen::Vector3f());
+    RenderBuffer.resize(X * Y * Settings.GridSize * Settings.GridSize, Eigen::Vector3f());
     ScreenRes.x() = X;
     ScreenRes.y() = Y;
 
@@ -55,7 +61,7 @@ void GamePlay::FlushBuffer()
     Buffer.clear();
     Buffer.resize(X * Y, Eigen::Vector3f(0.f, 0.f, 0.f));
     InitBorder();
-    RenderBuffer.resize(X * Y * 20 * 20, Eigen::Vector3f());
+    RenderBuffer.resize(X * Y * Settings.GridSize * Settings.GridSize, Eigen::Vector3f());
 
     //draw Snake
     for (int i = 0; i != mSnake.BodyCoord.size(); ++i)
@@ -98,12 +104,12 @@ void GamePlay::DrawRenderBuffer()
 
 void GamePlay::DrawGrid(int X, int Y, const Eigen::Vector3f &Color)
 {
-    constexpr int GridSize = 20;
+    const int GridSize = Settings.GridSize;
     for (int i = X * GridSize; i != X * GridSize + GridSize; ++i)
     {
         for (int j = Y * GridSize; j != Y * GridSize + GridSize; ++j)
         {
-            RenderBuffer[ScreenCoordToIndex(Eigen::Vector2i(i, j), Eigen::Vector2i(1000, 1000))] = Color;
+            RenderBuffer[ScreenCoordToIndex(Eigen::Vector2i(i, j), Eigen::Vector2i(Settings.BoardSize.x() * Settings.GridSize, Settings.BoardSize.y() * Settings.GridSize))] = Color;
         }
     }
 }

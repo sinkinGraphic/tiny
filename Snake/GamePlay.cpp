@@ -33,6 +33,35 @@ void GamePlay::SetScreenResolution(const int X, const int Y)
     CreateNewCandy();
 }
 
+void GamePlay::DrawCandy()
+{
+    static std::vector<Eigen::Vector3f> CandyStyle;
+    if (CandyStyle.size() == 0)
+    {
+        CandyStyle.resize(Settings.GridSize * Settings.GridSize);
+        for (int i = 0; i != Settings.GridSize; ++i)
+        {
+            constexpr int BorderWidth = 2;
+            for (int j = 0; j != BorderWidth; ++j)
+            {
+                CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(j, i), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
+                CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(i, j), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
+                CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(Settings.GridSize - j - 1, i), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
+                CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(i, Settings.GridSize - j - 1), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
+            }
+        }
+
+        constexpr int SquareOffset = 5;
+        for (int i = SquareOffset; i < Settings.GridSize - SquareOffset; ++i)
+        {
+            for (int j = SquareOffset; j < Settings.GridSize-SquareOffset; ++j)
+            {
+                CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(j, i), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
+            }
+        }
+    }
+}
+
 void GamePlay::Step()
 {
     mSnake.BodyCoord[0] += CurrentDirection;

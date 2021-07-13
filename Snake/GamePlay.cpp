@@ -33,7 +33,6 @@ void GamePlay::SetScreenResolution(const int X, const int Y)
     CreateNewCandy();
 }
 
-<<<<<<< HEAD
 void GamePlay::DrawCandy()
 {
     static std::vector<Eigen::Vector3f> CandyStyle;
@@ -63,8 +62,6 @@ void GamePlay::DrawCandy()
     }
 }
 
-=======
->>>>>>> parent of 94bd2a5 (candy style)
 void GamePlay::Step()
 {
     mSnake.BodyCoord[0] += CurrentDirection;

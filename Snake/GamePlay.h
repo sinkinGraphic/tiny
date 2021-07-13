@@ -47,6 +47,8 @@ private:
 
     void DrawGrid(const int X,const int Y,const Eigen::Vector3f& Color);
 
+    void DrawCandy();
+    
     Eigen::Vector2i CurrentDirection = Eigen::Vector2i(1, 0);
 
 private:

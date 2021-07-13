@@ -11,7 +11,7 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 #Build type
-set(CMAKE_BUILD_TYPE Release CACHE STRING "set build type")
+set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "set build type")
 
 project(Snake)
 

@@ -33,6 +33,7 @@ void GamePlay::SetScreenResolution(const int X, const int Y)
     CreateNewCandy();
 }
 
+<<<<<<< HEAD
 void GamePlay::DrawCandy()
 {
     static std::vector<Eigen::Vector3f> CandyStyle;
@@ -54,7 +55,7 @@ void GamePlay::DrawCandy()
         constexpr int SquareOffset = 5;
         for (int i = SquareOffset; i < Settings.GridSize - SquareOffset; ++i)
         {
-            for (int j = SquareOffset; j < Settings.GridSize-SquareOffset; ++j)
+            for (int j = SquareOffset; j < Settings.GridSize - SquareOffset; ++j)
             {
                 CandyStyle[ScreenCoordToIndex(Eigen::Vector2i(j, i), Eigen::Vector2i(Eigen::Vector2i(Settings.GridSize, Settings.GridSize)))] = Eigen::Vector3f(0.f, 0.f, 0.f);
             }
@@ -62,6 +63,8 @@ void GamePlay::DrawCandy()
     }
 }
 
+=======
+>>>>>>> parent of 94bd2a5 (candy style)
 void GamePlay::Step()
 {
     mSnake.BodyCoord[0] += CurrentDirection;
@@ -80,8 +83,8 @@ void GamePlay::Step()
 
 void GamePlay::CreateNewCandy()
 {
-    mCandy.Pos.x() = rand() % ScreenRes.x();
-    mCandy.Pos.y() = rand() % ScreenRes.y();
+    auto NewCandyPosition = GetCandySpawnPostion();
+    mCandy.Pos = NewCandyPosition;
 }
 
 void GamePlay::FlushBuffer()
@@ -146,4 +149,22 @@ void GamePlay::DrawGrid(int X, int Y, const Eigen::Vector3f &Color)
 int GamePlay::ScreenCoordToIndex(const Eigen::Vector2i &ScreenCoord, const Eigen::Vector2i &InScreenRes)
 {
     return ScreenCoord.y() * InScreenRes.x() + ScreenCoord.x();
+}
+
+bool GamePlay::IsCollideWithBoderOfSelf()
+{
+    return false;
+}
+
+void GamePlay::RestartGame()
+{
+    
+}
+
+Eigen::Vector2i GamePlay::GetCandySpawnPostion()
+{
+    Eigen::Vector2i SpawnPosition;
+    SpawnPosition.x() = rand() % Settings.BoardSize.x();
+    SpawnPosition.y() = rand() % Settings.BoardSize.y();
+    return Eigen::Vector2i();
 }

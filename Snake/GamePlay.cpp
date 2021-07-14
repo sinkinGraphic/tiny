@@ -150,12 +150,30 @@ int GamePlay::ScreenCoordToIndex(const Eigen::Vector2i &ScreenCoord, const Eigen
 
 bool GamePlay::IsCollideWithBoderOfSelf()
 {
+    //Check collision with border
+    for (const auto &rCoord : mSnake.BodyCoord)
+    {
+        if (rCoord.x() == 0 || rCoord.x() == Settings.BoardSize.x() - 1 || rCoord.y() == 0 || rCoord.y() == Settings.BoardSize.y() - 1)
+        {
+            return true;
+        }
+    }
+
+    //check collision with self
+    for (size_t Index = 2; Index < mSnake.BodyCoord.size(); ++Index)
+    {
+        //only head can collide with body
+        if (mSnake.BodyCoord[1] == mSnake.BodyCoord[Index])
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
 void GamePlay::RestartGame()
 {
-    
 }
 
 Eigen::Vector2i GamePlay::GetCandySpawnPostion()

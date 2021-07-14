@@ -23,6 +23,8 @@ class GamePlay
 {
 public:
 
+    GamePlay();
+
     void InitGame(const GameSettings& InGameSettings);
 
     void ProcessInput(EKeyBoradKeys Key);
@@ -48,7 +50,7 @@ private:
     void DrawGrid(const int X,const int Y,const Eigen::Vector3f& Color);
 
     void DrawCandy();
-    
+
     Eigen::Vector2i CurrentDirection = Eigen::Vector2i(1, 0);
 
 private:
@@ -58,6 +60,7 @@ private:
 
     Eigen::Vector2i GetCandySpawnPostion();
 
+    std::vector<Eigen::Vector2i> Border;
 private:
     std::vector<Eigen::Vector3f> Buffer;
     std::vector<Eigen::Vector3f> RenderBuffer;

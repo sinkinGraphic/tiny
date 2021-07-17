@@ -13,6 +13,13 @@ enum class EKeyBoradKeys : uint8_t
     D
 };
 
+enum class EGameState : uint8_t
+{
+    Normal,
+    Paused,
+    Error
+};
+
 struct GameSettings
 {
     Eigen::Vector2i BoardSize;
@@ -22,32 +29,30 @@ struct GameSettings
 class GamePlay
 {
 public:
-
-    GamePlay();
-
-    void InitGame(const GameSettings& InGameSettings);
+    void InitGame(const GameSettings &InGameSettings);
 
     void ProcessInput(EKeyBoradKeys Key);
 
-    void SetScreenResolution(const int X,const int Y);
+    void SetScreenResolution(const int X, const int Y);
 
     void CreateNewCandy();
 
-    std::vector<Eigen::Vector3f>& GetRenderBuffer() { return RenderBuffer; }
+    std::vector<Eigen::Vector3f> &GetRenderBuffer() { return RenderBuffer; }
 
     void Step();
 
+    EGameState GetGameState();
 private:
     void InitBorder();
-    
+
 private:
     void FlushBuffer();
-    
-    inline int ScreenCoordToIndex(const Eigen::Vector2i& ScreenCoord,const Eigen::Vector2i& InScreenRes);
+
+    inline int ScreenCoordToIndex(const Eigen::Vector2i &ScreenCoord, const Eigen::Vector2i &InScreenRes);
 
     void DrawRenderBuffer();
 
-    void DrawGrid(const int X,const int Y,const Eigen::Vector3f& Color);
+    void DrawGrid(const int X, const int Y, const Eigen::Vector3f &Color);
 
     void DrawCandy();
 
@@ -61,6 +66,7 @@ private:
     Eigen::Vector2i GetCandySpawnPostion();
 
     std::vector<Eigen::Vector2i> Border;
+
 private:
     std::vector<Eigen::Vector3f> Buffer;
     std::vector<Eigen::Vector3f> RenderBuffer;
@@ -70,4 +76,5 @@ private:
     Snake mSnake;
 
     GameSettings Settings;
+    EGameState State;
 };

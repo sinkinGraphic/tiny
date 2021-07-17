@@ -1,4 +1,5 @@
 #include "GamePlay.h"
+#include <iostream>
 
 void GamePlay::InitGame(const GameSettings &InGameSettings)
 {
@@ -62,6 +63,11 @@ void GamePlay::DrawCandy()
     }
 }
 
+EGameState GamePlay::GetGameState()
+{
+    return State;
+}
+
 void GamePlay::Step()
 {
     mSnake.BodyCoord[0] += CurrentDirection;
@@ -74,6 +80,12 @@ void GamePlay::Step()
     for (size_t i = Size - 1; i > 0; --i)
     {
         mSnake.BodyCoord[i] = mSnake.BodyCoord[i - 1];
+    }
+    if (IsCollideWithBoderOfSelf())
+    {
+        std::cout << "Collision " << std::endl;
+        State = EGameState::Error;
+        return;
     }
     FlushBuffer();
 }
@@ -112,11 +124,15 @@ void GamePlay::InitBorder()
     {
         Buffer[ScreenCoordToIndex(Eigen::Vector2i(0, i), ScreenRes)] = BorderColor;
         Buffer[ScreenCoordToIndex(Eigen::Vector2i(ScreenRes.x() - 1, i), ScreenRes)] = BorderColor;
+        Border.push_back(Eigen::Vector2i(0, i));
+        Border.push_back(Eigen::Vector2i(ScreenRes.x() - 1, i));
     }
     for (int i = 0; i != ScreenRes.x(); ++i)
     {
         Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, 0), ScreenRes)] = BorderColor;
         Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, ScreenRes.y() - 1), ScreenRes)] = BorderColor;
+        Border.push_back(Eigen::Vector2i(i, 0));
+        Border.push_back(Eigen::Vector2i(i, ScreenRes.y() - 1));
     }
 }
 
@@ -151,9 +167,9 @@ int GamePlay::ScreenCoordToIndex(const Eigen::Vector2i &ScreenCoord, const Eigen
 bool GamePlay::IsCollideWithBoderOfSelf()
 {
     //Check collision with border
-    for (const auto &rCoord : mSnake.BodyCoord)
+    for (const auto &rCoord : Border)
     {
-        if (rCoord.x() == 0 || rCoord.x() == Settings.BoardSize.x() - 1 || rCoord.y() == 0 || rCoord.y() == Settings.BoardSize.y() - 1)
+        if (mSnake.BodyCoord[1] == rCoord)
         {
             return true;
         }

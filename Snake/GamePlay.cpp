@@ -192,10 +192,51 @@ void GamePlay::RestartGame()
 {
 }
 
+template <typename ElementType>
+auto Find(const std::vector<ElementType> &Container, const ElementType &Element)
+{
+    auto First = Container.begin();
+    auto End = Container.end();
+    while (First != End)
+    {
+        if (*First == Element)
+        {
+            break;
+        }
+        ++First;
+    }
+    return First;
+}
+
 Eigen::Vector2i GamePlay::GetCandySpawnPostion()
 {
     Eigen::Vector2i SpawnPosition;
-    SpawnPosition.x() = rand() % Settings.BoardSize.x();
-    SpawnPosition.y() = rand() % Settings.BoardSize.y();
-    return Eigen::Vector2i();
+    std::vector<Eigen::Vector2i> AvailableSpawnPoint;
+    for (int i = 0; i != Settings.BoardSize.x(); ++i)
+    {
+        for (int j = 0; j != Settings.BoardSize.y(); ++j)
+        {
+            AvailableSpawnPoint.push_back(Eigen::Vector2i(i, j));
+        }
+    }
+
+    //exclude border
+    for (const auto &rBoder : Border)
+    {
+        auto Iter = Find(AvailableSpawnPoint, rBoder);
+        if (Iter != AvailableSpawnPoint.end())
+            AvailableSpawnPoint.erase(Iter);
+    }
+
+    //exclude snake
+    for (const auto &rSnake : mSnake.BodyCoord)
+    {
+        auto Iter = Find(AvailableSpawnPoint, rSnake);
+        if (Iter != AvailableSpawnPoint.end())
+            AvailableSpawnPoint.erase(Iter);
+    }
+    auto Size = rand() % AvailableSpawnPoint.size();
+    std::cout << Size << std::endl;
+    SpawnPosition = AvailableSpawnPoint[Size];
+    return SpawnPosition;
 }

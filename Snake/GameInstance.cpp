@@ -42,12 +42,13 @@ void GameInstance::Tick(float DeltaSeconds)
         if (bHasInput == false)
         {
             GamePlayLogic.Step();
+            Seconds = 0.f;
         }
         else
         {
             bHasInput = false;
+            Seconds = .2f;
         }
-        Seconds = 0.f;
     }
 
     static std::map<int, EKeyBoradKeys> Key2Type = {

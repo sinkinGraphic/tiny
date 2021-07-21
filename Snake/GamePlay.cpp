@@ -21,14 +21,13 @@ void GamePlay::ProcessInput(EKeyBoradKeys Key)
 void GamePlay::SetScreenResolution(const int X, const int Y)
 {
     Buffer.resize(X * Y);
+    EntityOnBoard.resize(X * Y);
     RenderBuffer.resize(X * Y * Settings.GridSize * Settings.GridSize, Eigen::Vector3f());
-    ScreenRes.x() = X;
-    ScreenRes.y() = Y;
+    BoardSize.x() = X;
+    BoardSize.y() = Y;
 
     InitBorder();
-
-    DrawRenderBuffer();
-
+    InitDrawStyle();
     mSnake.BodyCoord.push_back(Eigen::Vector2i(X / 2, Y / 2));
     mSnake.BodyCoord.push_back(Eigen::Vector2i(X / 2, Y / 2));
     CreateNewCandy();
@@ -90,6 +89,11 @@ void GamePlay::Step()
     FlushBuffer();
 }
 
+void GamePlay::InitDrawStyle()
+{
+
+}
+
 void GamePlay::CreateNewCandy()
 {
     auto NewCandyPosition = GetCandySpawnPostion();
@@ -98,21 +102,24 @@ void GamePlay::CreateNewCandy()
 
 void GamePlay::FlushBuffer()
 {
-    int X = ScreenRes.x(), Y = ScreenRes.y();
+    int X = BoardSize.x(), Y = BoardSize.y();
     Buffer.clear();
     Buffer.resize(X * Y, Eigen::Vector3f(0.f, 0.f, 0.f));
+    EntityOnBoard.clear();
+    EntityOnBoard.resize(X * Y, EEntityType::None);
     InitBorder();
     RenderBuffer.resize(X * Y * Settings.GridSize * Settings.GridSize, Eigen::Vector3f());
 
     //draw Snake
     for (int i = 0; i != mSnake.BodyCoord.size(); ++i)
     {
-        Buffer[ScreenCoordToIndex(mSnake.BodyCoord[i], ScreenRes)] = Eigen::Vector3f(1.f, 0.f, 0.f);
+        Buffer[ScreenCoordToIndex(mSnake.BodyCoord[i], BoardSize)] = Eigen::Vector3f(1.f, 0.f, 0.f);
+        EntityOnBoard[ScreenCoordToIndex(mSnake.BodyCoord[i], BoardSize)] = i == 0 || i == 1 ? EEntityType::SnakeHead : EEntityType::SnakeBody;
     }
 
     //draw candy
-    Buffer[ScreenCoordToIndex(mCandy.Pos, ScreenRes)] = Eigen::Vector3f(0.f, 1.f, 0.f);
-
+    Buffer[ScreenCoordToIndex(mCandy.Pos, BoardSize)] = Eigen::Vector3f(0.f, 1.f, 0.f);
+    EntityOnBoard[ScreenCoordToIndex(mCandy.Pos, BoardSize)] = EEntityType::Candy;
     DrawRenderBuffer();
 }
 
@@ -120,29 +127,51 @@ void GamePlay::InitBorder()
 {
     const Eigen::Vector3f BorderColor = Eigen::Vector3f(1.f, 1.f, 1.f);
 
-    for (int i = 0; i != ScreenRes.y(); ++i)
+    for (int i = 0; i != BoardSize.y(); ++i)
     {
-        Buffer[ScreenCoordToIndex(Eigen::Vector2i(0, i), ScreenRes)] = BorderColor;
-        Buffer[ScreenCoordToIndex(Eigen::Vector2i(ScreenRes.x() - 1, i), ScreenRes)] = BorderColor;
+        Buffer[ScreenCoordToIndex(Eigen::Vector2i(0, i), BoardSize)] = BorderColor;
+        Buffer[ScreenCoordToIndex(Eigen::Vector2i(BoardSize.x() - 1, i), BoardSize)] = BorderColor;
+        EntityOnBoard[ScreenCoordToIndex(Eigen::Vector2i(0, i), BoardSize)] = EEntityType::Border;
+        EntityOnBoard[ScreenCoordToIndex(Eigen::Vector2i(BoardSize.x() - 1, i), BoardSize)] = EEntityType::Border;
+
         Border.push_back(Eigen::Vector2i(0, i));
-        Border.push_back(Eigen::Vector2i(ScreenRes.x() - 1, i));
+        Border.push_back(Eigen::Vector2i(BoardSize.x() - 1, i));
     }
-    for (int i = 0; i != ScreenRes.x(); ++i)
+    for (int i = 0; i != BoardSize.x(); ++i)
     {
-        Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, 0), ScreenRes)] = BorderColor;
-        Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, ScreenRes.y() - 1), ScreenRes)] = BorderColor;
+        Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, 0), BoardSize)] = BorderColor;
+        Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, BoardSize.y() - 1), BoardSize)] = BorderColor;
+        EntityOnBoard[ScreenCoordToIndex(Eigen::Vector2i(i, 0), BoardSize)] = EEntityType::Border;
+        EntityOnBoard[ScreenCoordToIndex(Eigen::Vector2i(i, BoardSize.y() - 1), BoardSize)] = EEntityType::Border;
         Border.push_back(Eigen::Vector2i(i, 0));
-        Border.push_back(Eigen::Vector2i(i, ScreenRes.y() - 1));
+        Border.push_back(Eigen::Vector2i(i, BoardSize.y() - 1));
+    }
+}
+const std::vector<Eigen::Vector3f> &GamePlay::GetEntityDrawStyle(EEntityType EntityType)
+{
+    return DrawStyle[EntityType];
+}
+
+void GamePlay::DrawEntity(const int X, const int Y, EEntityType Entity)
+{
+    const int GridSize = Settings.GridSize;
+    const std::vector<Eigen::Vector3f> &EntityStyle = GetEntityDrawStyle(Entity);
+    for (int i = X * GridSize; i != X * GridSize + GridSize; ++i)
+    {
+        for (int j = Y * GridSize; j != Y * GridSize + GridSize; ++j)
+        {
+        }
     }
 }
 
 void GamePlay::DrawRenderBuffer()
 {
-    for (int i = 0; i != ScreenRes.x(); ++i)
+    for (int i = 0; i != BoardSize.x(); ++i)
     {
-        for (int j = 0; j != ScreenRes.y(); ++j)
+        for (int j = 0; j != BoardSize.y(); ++j)
         {
-            DrawGrid(i, j, Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, j), ScreenRes)]);
+            DrawGrid(i, j, Buffer[ScreenCoordToIndex(Eigen::Vector2i(i, j), BoardSize)]);
+            DrawEntity(i, j, EntityOnBoard[ScreenCoordToIndex(Eigen::Vector2i(i, j), BoardSize)]);
         }
     }
 }

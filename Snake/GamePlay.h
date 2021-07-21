@@ -4,6 +4,7 @@
 #include "Eigen/Eigen"
 #include "Snake.hpp"
 #include "Candy.hpp"
+#include <map>
 
 enum class EKeyBoradKeys : uint8_t
 {
@@ -13,6 +14,13 @@ enum class EKeyBoradKeys : uint8_t
     D
 };
 
+enum class EEntityType : uint8_t{
+    SnakeHead,
+    SnakeBody,
+    Candy,
+    Border,
+    None
+};
 enum class EGameState : uint8_t
 {
     Normal,
@@ -54,7 +62,12 @@ private:
 
     void DrawGrid(const int X, const int Y, const Eigen::Vector3f &Color);
 
+    void DrawEntity(const int X, const int Y, EEntityType Entity);
+
+
     void DrawCandy();
+
+    const std::vector<Eigen::Vector3f>& GetEntityDrawStyle(EEntityType EntityType);
 
     Eigen::Vector2i CurrentDirection = Eigen::Vector2i(1, 0);
 
@@ -69,12 +82,14 @@ private:
 
 private:
     std::vector<Eigen::Vector3f> Buffer;
+    std::vector<EEntityType> EntityOnBoard;
     std::vector<Eigen::Vector3f> RenderBuffer;
-    Eigen::Vector2i ScreenRes;
+    Eigen::Vector2i BoardSize;
 
     Candy mCandy;
     Snake mSnake;
 
     GameSettings Settings;
     EGameState State;
+    std::map<EEntityType,std::vector<Eigen::Vector3f> > DrawStyle;
 };

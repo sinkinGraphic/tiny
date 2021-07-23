@@ -64,6 +64,7 @@ private:
 
     void DrawEntity(const int X, const int Y, EEntityType Entity);
 
+    void InitDrawStyle();
 
     void DrawCandy();
 

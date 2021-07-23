@@ -91,7 +91,26 @@ void GamePlay::Step()
 
 void GamePlay::InitDrawStyle()
 {
+    DrawStyle.clear();
+    DrawStyle.emplace(EEntityType::Border, std::vector<Eigen::Vector3f>());
+    DrawStyle.emplace(EEntityType::SnakeBody, std::vector<Eigen::Vector3f>());
+    DrawStyle.emplace(EEntityType::SnakeHead, std::vector<Eigen::Vector3f>());
+    DrawStyle.emplace(EEntityType::Candy, std::vector<Eigen::Vector3f>());
 
+    const auto Size = Settings.GridSize * Settings.GridSize;
+
+    //Candy Style
+    DrawStyle[EEntityType::Candy].resize(Settings.GridSize * Settings.GridSize, Eigen::Vector3f());
+    for (int i = 0; i != Settings.GridSize; ++i)
+    {
+        for (int j = 0; j != Settings.GridSize; ++j)
+        {
+        }
+    }
+
+    //Border Style
+    const Eigen::Vector3f BorderColor = Eigen::Vector3f(0.f, 0.f, 0.f);
+    DrawStyle[EEntityType::Border].resize(Size, BorderColor);
 }
 
 void GamePlay::CreateNewCandy()

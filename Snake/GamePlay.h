@@ -6,7 +6,7 @@
 #include "Candy.hpp"
 #include <map>
 
-enum class EKeyBoradKeys : uint8_t
+enum class EKeyBoardKeys : uint8_t
 {
     W,
     A,
@@ -14,7 +14,8 @@ enum class EKeyBoradKeys : uint8_t
     D
 };
 
-enum class EEntityType : uint8_t{
+enum class EEntityType : uint8_t
+{
     SnakeHead,
     SnakeBody,
     Candy,
@@ -39,17 +40,21 @@ class GamePlay
 public:
     void InitGame(const GameSettings &InGameSettings);
 
-    void ProcessInput(EKeyBoradKeys Key);
+    void ProcessInput(EKeyBoardKeys Key);
 
     void SetScreenResolution(const int X, const int Y);
 
     void CreateNewCandy();
 
-    std::vector<Eigen::Vector3f> &GetRenderBuffer() { return RenderBuffer; }
+    std::vector<Eigen::Vector3f> &GetRenderBuffer()
+    {
+        return RenderBuffer;
+    }
 
     void Step();
 
     EGameState GetGameState();
+
 private:
     void InitBorder();
 
@@ -68,16 +73,16 @@ private:
 
     void DrawCandy();
 
-    const std::vector<Eigen::Vector3f>& GetEntityDrawStyle(EEntityType EntityType);
+    const std::vector<Eigen::Vector3f> &GetEntityDrawStyle(EEntityType EntityType);
 
     Eigen::Vector2i CurrentDirection = Eigen::Vector2i(1, 0);
 
 private:
-    bool IsCollideWithBoderOfSelf();
+    bool IsCollideWithBorderOrSelf();
 
     void RestartGame();
 
-    Eigen::Vector2i GetCandySpawnPostion();
+    Eigen::Vector2i GetCandySpawnPosition();
 
     std::vector<Eigen::Vector2i> Border;
 
@@ -92,5 +97,5 @@ private:
 
     GameSettings Settings;
     EGameState State;
-    std::map<EEntityType,std::vector<Eigen::Vector3f> > DrawStyle;
+    std::map<EEntityType, std::vector<Eigen::Vector3f> > DrawStyle;
 };

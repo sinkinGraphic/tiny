@@ -51,11 +51,12 @@ void GameInstance::Tick(float DeltaSeconds)
         }
     }
 
-    static std::map<int, EKeyBoradKeys> Key2Type = {
-        std::pair<int, EKeyBoradKeys>(119, EKeyBoradKeys::W),
-        std::pair<int, EKeyBoradKeys>(97, EKeyBoradKeys::A),
-        std::pair<int, EKeyBoradKeys>(115, EKeyBoradKeys::S),
-        std::pair<int, EKeyBoradKeys>(100, EKeyBoradKeys::D)};
+    static std::map<int, EKeyBoardKeys> Key2Type = {
+        std::pair<int, EKeyBoardKeys>(119, EKeyBoardKeys::W),
+        std::pair<int, EKeyBoardKeys>(97, EKeyBoardKeys::A),
+        std::pair<int, EKeyBoardKeys>(115, EKeyBoardKeys::S),
+        std::pair<int, EKeyBoardKeys>(100, EKeyBoardKeys::D)
+    };
 
     int Key;
     cv::Mat img(Settings.BoardSize.x() * Settings.GridSize, Settings.BoardSize.y() * Settings.GridSize, CV_32FC3, GamePlayLogic.GetRenderBuffer().data());

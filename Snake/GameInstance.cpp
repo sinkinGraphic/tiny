@@ -52,10 +52,10 @@ void GameInstance::Tick(float DeltaSeconds)
     }
 
     static std::map<int, EKeyBoardKeys> Key2Type = {
-        std::pair<int, EKeyBoardKeys>(119, EKeyBoardKeys::W),
-        std::pair<int, EKeyBoardKeys>(97, EKeyBoardKeys::A),
-        std::pair<int, EKeyBoardKeys>(115, EKeyBoardKeys::S),
-        std::pair<int, EKeyBoardKeys>(100, EKeyBoardKeys::D)
+            std::pair<int, EKeyBoardKeys>(119, EKeyBoardKeys::W),
+            std::pair<int, EKeyBoardKeys>(97, EKeyBoardKeys::A),
+            std::pair<int, EKeyBoardKeys>(115, EKeyBoardKeys::S),
+            std::pair<int, EKeyBoardKeys>(100, EKeyBoardKeys::D)
     };
 
     int Key;

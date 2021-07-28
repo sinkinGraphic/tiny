@@ -71,8 +71,6 @@ private:
 
     void InitDrawStyle();
 
-    void DrawCandy();
-
     const std::vector<Eigen::Vector3f> &GetEntityDrawStyle(EEntityType EntityType);
 
     Eigen::Vector2i CurrentDirection = Eigen::Vector2i(1, 0);

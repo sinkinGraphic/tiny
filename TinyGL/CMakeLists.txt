@@ -6,9 +6,6 @@ set(CMAKE_SIZEOF_VOID_P 8)
 #Cpp standard
 set(CMAKE_CXX_STANDARD 14)
 
-#Settings and Definitions
-add_definitions(-DPROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
-
 #GLFW
 find_package(glfw3 REQUIRED)
 

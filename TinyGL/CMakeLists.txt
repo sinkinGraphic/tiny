@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.0)
 #Resolve cmake error
 set(CMAKE_SIZEOF_VOID_P 8)
 
+#Cpp standard
+set(CMAKE_CXX_STANDARD 14)
+
+#Settings and Definitions
+add_definitions(-DPROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+
 #GLFW
 find_package(glfw3 REQUIRED)
 
@@ -12,8 +18,9 @@ include_directories(${GLFW3_INCLUDE_DIRS})
 find_package(glad REQUIRED)
 include_directories(${GLAD_INCLUDE_DIRS})
 
-#Build type
-set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "set build type")
+#Utils
+add_subdirectory("Utils")
+include_directories("Utils")
 
 project(TinyGL)
 
@@ -24,3 +31,6 @@ target_link_libraries(TinyGL ${GLFW3_LIBS})
 
 #GLAD libs
 target_link_libraries(TinyGL ${GLAD_LIBS})
+
+#Utils libs
+target_link_libraries(TinyGL TinyUtils)

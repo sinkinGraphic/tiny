@@ -1,6 +1,8 @@
 #include <iostream>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "FileHelper.h"
+#include "Paths.h"
 
 void OnFrameBufferResized(GLFWwindow *Window, int Width, int Height)
 {
@@ -35,23 +37,30 @@ int main()
     //set callback
     glfwSetFramebufferSizeCallback(Window, &OnFrameBufferResized);
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(&glfwGetProcAddress)))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
     while (!glfwWindowShouldClose(Window))
     {
         //input
         ProcessInput(Window);
 
         //render
-        glClearColor(.2f,.3f,.3f,1.f);
+        glClearColor(.2f, .3f, .3f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         //switch buffer
         glfwSwapBuffers(Window);
         glfwPollEvents();
+    }
+    std::string VertexShader;
+    const std::string ShaderFilePath=Tiny::Paths::ProjectDir()+"Shader/VertexShader.glsl";
+    if(Tiny::FileHelper::LoadFileToString(VertexShader, ShaderFilePath))
+    {
+        std::cout << VertexShader << std::endl;
     }
     return 0;
 }

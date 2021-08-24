@@ -43,23 +43,9 @@ int main()
         return -1;
     }
 
-    while (!glfwWindowShouldClose(Window))
-    {
-        //input
-        ProcessInput(Window);
-
-        //render
-        glClearColor(.2f, .3f, .3f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //switch buffer
-        glfwSwapBuffers(Window);
-        glfwPollEvents();
-    }
-
     //Vertex Shader
     std::string VertexShaderSource;
-    const std::string ShaderFilePath = Tiny::Paths::ProjectDir() + "Shader/VertexShaderSource.glsl";
+    const std::string ShaderFilePath = Tiny::Paths::ProjectDir() + "Shader/VertexShader.glsl";
     if (Tiny::FileHelper::LoadFileToString(VertexShaderSource, ShaderFilePath))
     {
         std::cout << VertexShaderSource << std::endl;
@@ -68,8 +54,13 @@ int main()
     float vertices[] = {
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
-            0.0f, 0.5f, 0.0f
+            0.0f, 0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, -1.f, 0.0f
     };
+
+    //VBO
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -104,7 +95,51 @@ int main()
 
     glUseProgram(ShaderProgram);
 
+
+    float vertices2[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 1.f, 0.0f
+    };
+    unsigned int VBO2;
+    glGenBuffers(1, &VBO2);
+
+
+    //VAO
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(0);
+    while (!glfwWindowShouldClose(Window))
+    {
+        //input
+        ProcessInput(Window);
+
+        //render
+        glClearColor(.2f, .3f, .3f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(ShaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        //switch buffer
+        glfwSwapBuffers(Window);
+        glfwPollEvents();
+    }
+
     glDeleteShader(VertexShader);
     glDeleteShader(FragmentShader);
+    glDeleteProgram(ShaderProgram);
+    glfwTerminate();
+
     return 0;
 }

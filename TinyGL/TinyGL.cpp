@@ -56,11 +56,55 @@ int main()
         glfwSwapBuffers(Window);
         glfwPollEvents();
     }
-    std::string VertexShader;
-    const std::string ShaderFilePath=Tiny::Paths::ProjectDir()+"Shader/VertexShader.glsl";
-    if(Tiny::FileHelper::LoadFileToString(VertexShader, ShaderFilePath))
+
+    //Vertex Shader
+    std::string VertexShaderSource;
+    const std::string ShaderFilePath = Tiny::Paths::ProjectDir() + "Shader/VertexShaderSource.glsl";
+    if (Tiny::FileHelper::LoadFileToString(VertexShaderSource, ShaderFilePath))
     {
-        std::cout << VertexShader << std::endl;
+        std::cout << VertexShaderSource << std::endl;
     }
+
+    float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f
+    };
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    unsigned int VertexShader;
+    VertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const char *VertexShaderSourceAddress = VertexShaderSource.data();
+    glShaderSource(VertexShader, 1, &VertexShaderSourceAddress, nullptr);
+    glCompileShader(VertexShader);
+
+    //Fragment Shader
+    std::string FragmentShaderSource;
+    const std::string FragmentShaderPath = Tiny::Paths::ProjectDir() + "Shader/FragmentShader.glsl";
+
+    if (Tiny::FileHelper::LoadFileToString(FragmentShaderSource, FragmentShaderPath))
+    {
+        std::cout << FragmentShaderSource << std::endl;
+    }
+
+    unsigned int FragmentShader;
+    FragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const char *FragmentShaderSourceAddress = FragmentShaderSource.data();
+    glShaderSource(FragmentShader, 1, &FragmentShaderSourceAddress, nullptr);
+    glCompileShader(FragmentShader);
+
+    //Shader Program
+    unsigned int ShaderProgram;
+    ShaderProgram = glCreateProgram();
+    glAttachShader(ShaderProgram, VertexShader);
+    glAttachShader(ShaderProgram, FragmentShader);
+    glLinkProgram(ShaderProgram);
+
+    glUseProgram(ShaderProgram);
+
+    glDeleteShader(VertexShader);
+    glDeleteShader(FragmentShader);
     return 0;
 }

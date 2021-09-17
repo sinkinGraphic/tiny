@@ -6,6 +6,6 @@ namespace Tiny
 {
     namespace FileHelper
     {
-        _NODISCARD bool LoadFileToString(std::string &Result, const std::string &FilePath);
+        [[nodiscard]] bool LoadFileToString(std::string &Result, const std::string &FilePath);
     }
 };

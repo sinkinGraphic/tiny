@@ -6,6 +6,6 @@ namespace Tiny
 {
     namespace Paths
     {
-        _NODISCARD std::string ProjectDir();
+        [[nodiscard]] std::string ProjectDir();
     };
 };

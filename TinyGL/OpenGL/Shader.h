@@ -8,7 +8,7 @@ namespace Tiny
     class ShaderCompileError : public std::exception
     {
     public:
-        [[nodiscard]] const char* what() const override;
+        [[nodiscard]] const char* what() const noexcept override;
 
         explicit ShaderCompileError(const char* ErrorInfo)
                 : Error(ErrorInfo)

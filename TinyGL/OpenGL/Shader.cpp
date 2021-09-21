@@ -3,7 +3,7 @@
 
 namespace Tiny
 {
-    const char *ShaderCompileError::what() const
+    const char *ShaderCompileError::what() const noexcept
     {
         return Error;
     }

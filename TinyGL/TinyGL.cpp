@@ -51,20 +51,6 @@ int main()
         std::cout << VertexShaderSource << std::endl;
     }
 
-    float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f, -1.f, 0.0f
-    };
-
-    //VBO
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
     unsigned int VertexShader;
     VertexShader = glCreateShader(GL_VERTEX_SHADER);
     const char *VertexShaderSourceAddress = VertexShaderSource.data();
@@ -92,18 +78,27 @@ int main()
     glAttachShader(ShaderProgram, VertexShader);
     glAttachShader(ShaderProgram, FragmentShader);
     glLinkProgram(ShaderProgram);
-
     glUseProgram(ShaderProgram);
 
-
-    float vertices2[] = {
+    float vertices[] = {
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
-            0.0f, 1.f, 0.0f
+            0.0f, 0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, -1.f, 0.0f
     };
-    unsigned int VBO2;
-    glGenBuffers(1, &VBO2);
 
+    float vertices2[] = {
+            0.5f, -0.5f, 0.0f,
+            0.0f, -1.f, 0.0f,
+            1.f, 1.f, 0.0f
+    };
+    //VBO
+    unsigned int VBO,VBO2;
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &VBO2);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     //VAO
     unsigned int VAO;
@@ -114,11 +109,13 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     while (!glfwWindowShouldClose(Window))
     {
         //input

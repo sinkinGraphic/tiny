@@ -75,4 +75,10 @@ namespace Tiny
         glLinkProgram(ShaderProgram);
     }
 
+    void Shader::SetInt(const char* ParamName, int Value)
+    {
+        unsigned int ParamLocation = glGetUniformLocation(ShaderProgram,ParamName);
+        glUniform1i(ParamLocation,Value);
+    }
+
 }

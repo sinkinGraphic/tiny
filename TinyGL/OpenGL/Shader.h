@@ -8,15 +8,15 @@ namespace Tiny
     class ShaderCompileError : public std::exception
     {
     public:
-        [[nodiscard]] const char *what() const override;
+        [[nodiscard]] const char* what() const override;
 
-        explicit ShaderCompileError(const char *ErrorInfo)
+        explicit ShaderCompileError(const char* ErrorInfo)
                 : Error(ErrorInfo)
         {
         };
 
     public:
-        const char *Error;
+        const char* Error;
     };
 
     class Shader final
@@ -27,14 +27,14 @@ namespace Tiny
         ~Shader();
 
     public:
-        void Compile(GLenum ShaderType, const char *ShaderSource);
+        void Compile(GLenum ShaderType, const char* ShaderSource);
 
         void Link();
 
         void Use();
 
     public:
-
+        void SetInt(const char* ParamName,int Value);
 
     private:
         unsigned int VertexShader = 0;

@@ -19,10 +19,11 @@ add_subdirectory("Utils")
 include_directories("Utils")
 
 include_directories("OpenGL")
+include_directories("ThirdParty")
 
 project(TinyGL)
 
-add_executable(TinyGL TinyGL.cpp OpenGL/Shader.h OpenGL/Shader.cpp)
+add_executable(TinyGL TinyGL.cpp OpenGL/Shader.h OpenGL/Shader.cpp ThirdParty/stb_image.cpp ThirdParty/stb_image.h)
 
 #GLFW libs
 target_link_libraries(TinyGL ${GLFW3_LIBS})

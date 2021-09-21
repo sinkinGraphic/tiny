@@ -18,9 +18,11 @@ include_directories(${GLAD_INCLUDE_DIRS})
 add_subdirectory("Utils")
 include_directories("Utils")
 
+include_directories("OpenGL")
+
 project(TinyGL)
 
-add_executable(TinyGL TinyGL.cpp)
+add_executable(TinyGL TinyGL.cpp OpenGL/Shader.h OpenGL/Shader.cpp)
 
 #GLFW libs
 target_link_libraries(TinyGL ${GLFW3_LIBS})
